@@ -5,82 +5,77 @@ namespace App\Http\Controllers;
 use App\Models\Proizvod;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class ProizvodController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        //
+        $proizvodi = Proizvod::all();
+        return response()->json($proizvodi, 200);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function show($id)
     {
-        //
+        $proizvod = Proizvod::findOrFail($id);
+        return response()->json($proizvod, 200);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'naziv' => 'required|string|max:255',
+            'opis' => 'nullable|string',
+            'cena' => 'required|numeric|min:0',
+            'kolekcija_id' => 'required|exists:kolekcijas,id',
+            'slika' => 'nullable|string',
+            'dostupan' => 'boolean',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        $proizvod = Proizvod::create($request->all());
+
+        return response()->json([
+            'message' => 'Proizvod uspešno kreiran.',
+            'proizvod' => $proizvod,
+        ], 201);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Proizvod  $proizvod
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Proizvod $proizvod)
+    public function update(Request $request, $id)
     {
-        //
+        $proizvod = Proizvod::findOrFail($id);
+
+        $validator = Validator::make($request->all(), [
+            'naziv' => 'required|string|max:255',
+            'opis' => 'nullable|string',
+            'cena' => 'required|numeric|min:0',
+            'kolekcija_id' => 'required|exists:kolekcijas,id',
+            'slika' => 'nullable|string',
+            'dostupan' => 'boolean',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        $proizvod->update($request->all());
+
+        return response()->json([
+            'message' => 'Proizvod uspešno ažuriran.',
+            'proizvod' => $proizvod,
+        ], 200);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Proizvod  $proizvod
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Proizvod $proizvod)
+    public function destroy($id)
     {
-        //
-    }
+        $proizvod = Proizvod::findOrFail($id);
+        $proizvod->delete();
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Proizvod  $proizvod
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Proizvod $proizvod)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Proizvod  $proizvod
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Proizvod $proizvod)
-    {
-        //
+        return response()->json([
+            'message' => 'Proizvod uspešno obrisan.',
+        ], 200);
     }
 }
