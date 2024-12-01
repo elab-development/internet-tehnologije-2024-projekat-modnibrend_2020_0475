@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BlogPostController;
 use App\Http\Controllers\KolekcijaController;
 use App\Http\Controllers\ProizvodController;
 use Illuminate\Http\Request;
@@ -38,4 +39,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/kolekcije', [KolekcijaController::class, 'store']);
     Route::put('/kolekcije/{id}', [KolekcijaController::class, 'update']);
     Route::delete('/kolekcije/{id}', [KolekcijaController::class, 'destroy']);
+});
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::apiResource('blog-posts', BlogPostController::class);
 });

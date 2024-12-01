@@ -5,82 +5,75 @@ namespace App\Http\Controllers;
 use App\Models\BlogPost;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class BlogPostController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        //
+        $blogPosts = BlogPost::all();
+        return response()->json($blogPosts, 200);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function show($id)
     {
-        //
+        $blogPost = BlogPost::findOrFail($id);
+        return response()->json($blogPost, 200);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'naslov' => 'required|string|max:255',
+            'sadrzaj' => 'required|string',
+            'autor' => 'required|string|max:255',
+            'datum_objave' => 'nullable|date',
+            'kategorija' => 'nullable|string|max:255',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        $blogPost = BlogPost::create($request->all());
+
+        return response()->json([
+            'message' => 'Blog post uspešno kreiran.',
+            'blogPost' => $blogPost,
+        ], 201);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\BlogPost  $blogPost
-     * @return \Illuminate\Http\Response
-     */
-    public function show(BlogPost $blogPost)
+    public function update(Request $request, $id)
     {
-        //
+        $blogPost = BlogPost::findOrFail($id);
+
+        $validator = Validator::make($request->all(), [
+            'naslov' => 'required|string|max:255',
+            'sadrzaj' => 'required|string',
+            'autor' => 'required|string|max:255',
+            'datum_objave' => 'nullable|date',
+            'kategorija' => 'nullable|string|max:255',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        $blogPost->update($request->all());
+
+        return response()->json([
+            'message' => 'Blog post uspešno ažuriran.',
+            'blogPost' => $blogPost,
+        ], 200);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\BlogPost  $blogPost
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(BlogPost $blogPost)
+    public function destroy($id)
     {
-        //
-    }
+        $blogPost = BlogPost::findOrFail($id);
+        $blogPost->delete();
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\BlogPost  $blogPost
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, BlogPost $blogPost)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\BlogPost  $blogPost
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(BlogPost $blogPost)
-    {
-        //
+        return response()->json([
+            'message' => 'Blog post uspešno obrisan.',
+        ], 200);
     }
 }
