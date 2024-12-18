@@ -1,0 +1,267 @@
+/* Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body, html {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    color: #333;
+    scroll-behavior: smooth;
+    background: #fdfdfd;
+  }
+  
+  .homepage-container {
+    overflow-x: hidden;
+  }
+  
+  /* Hero Section */
+  .hero {
+    background: url('https://source.unsplash.com/1600x900/?fashion') center/cover no-repeat;
+    height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 0 5%;
+    animation: fadeIn 1.2s ease-in-out;
+    position: relative;
+  }
+  
+  .hero::before {
+    content: "";
+    position: absolute;
+    top:0; left:0; right:0; bottom:0;
+    background: rgba(0,0,0,0.4);
+  }
+  
+  .hero-content {
+    position: relative;
+    z-index: 1;
+    max-width: 500px;
+    color: #fff;
+    animation: slideInFromLeft 1.5s ease-out;
+  }
+  
+  .hero-title {
+    font-size: 3rem;
+    margin-bottom: 20px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+  
+  .hero-subtitle {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+  }
+  
+  .hero-button {
+    background: #fff;
+    color: #000;
+    padding: 12px 24px;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .hero-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+  }
+  
+  /* Brand Highlights */
+  .brand-highlights {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 60px 5%;
+    gap: 40px;
+    background: #f4f4f4;
+  }
+  
+  .highlight-card {
+    background: #fff;
+    flex: 1 1 250px;
+    max-width: 300px;
+    padding: 30px;
+    text-align: center;
+    border-radius: 8px;
+    transition: transform 0.3s ease;
+    animation: fadeInUp 1s ease both;
+  }
+  
+  .highlight-card:hover {
+    transform: translateY(-5px);
+  }
+  
+  .highlight-card img {
+    max-width: 100px;
+    margin-bottom: 20px;
+  }
+  
+  /* Featured Products */
+  .featured-products {
+    padding: 60px 5%;
+  }
+  
+  .section-title {
+    font-size: 2rem;
+    text-align: center;
+    margin-bottom: 40px;
+    letter-spacing: 1px;
+  }
+  
+  .product-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px;
+    justify-content: center;
+  }
+  
+  .product-card {
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    max-width: 300px;
+    flex: 1 1 250px;
+    transition: transform 0.3s ease;
+    animation: fadeInUp 1.2s ease both;
+  }
+  
+  .product-card:hover {
+    transform: translateY(-5px);
+  }
+  
+  .product-image {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+  
+  .product-title {
+    margin: 20px;
+    font-size: 1.4rem;
+    font-weight: bold;
+  }
+  
+  .product-description {
+    margin: 0 20px 20px;
+    color: #666;
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+  
+  .product-button {
+    display: block;
+    margin: 0 20px 20px;
+    padding: 10px 20px;
+    background: #000;
+    color: #fff;
+    text-align: center;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background 0.3s ease;
+  }
+  
+  .product-button:hover {
+    background: #333;
+  }
+  
+  /* Instagram Section */
+  .instagram-section {
+    padding: 60px 5%;
+    background: #f4f4f4;
+  }
+  
+  .insta-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+  }
+  
+  .insta-image {
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+    animation: fadeIn 1.2s ease-in-out;
+  }
+  
+  /* Footer */
+  .footer {
+    background: #000;
+    color: #fff;
+    text-align: center;
+    padding: 40px 5%;
+    margin-top: 60px;
+  }
+  
+  .footer-socials {
+    margin-bottom: 20px;
+  }
+  
+  .footer-icon {
+    font-size: 1.2rem;
+    margin: 0 10px;
+    cursor: pointer;
+    transition: color 0.3s ease;
+  }
+  
+  .footer-icon:hover {
+    color: #ccc;
+  }
+  
+  .footer-text {
+    font-size: 0.9rem;
+    color: #ccc;
+  }
+  
+  /* Animations */
+  @keyframes fadeIn {
+    0% {opacity: 0;}
+    100% {opacity: 1;}
+  }
+  
+  @keyframes slideInFromLeft {
+    0% {transform: translateX(-20%); opacity: 0;}
+    100% {transform: translateX(0); opacity: 1;}
+  }
+  
+  @keyframes fadeInUp {
+    0% {opacity: 0; transform: translateY(20px);}
+    100% {opacity: 1; transform: translateY(0);}
+  }
+  
+  /* Responsive */
+  @media (max-width: 768px) {
+    .hero-title {
+      font-size: 2.2rem;
+    }
+  
+    .hero-subtitle {
+      font-size: 1rem;
+    }
+  
+    .brand-highlights, .featured-products, .instagram-section, .footer {
+      padding: 40px 5%;
+    }
+  
+    .insta-image {
+      width: 45%;
+      height: auto;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .highlight-card img {
+      max-width: 60px;
+    }
+  
+    .insta-image {
+      width: 100%;
+      height: auto;
+    }
+  }
+  
