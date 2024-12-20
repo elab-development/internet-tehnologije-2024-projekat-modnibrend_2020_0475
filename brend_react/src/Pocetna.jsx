@@ -14,6 +14,11 @@ const Pocetna = () => {
         </div>
       </section>
 
+      <section className="auth-links">
+      <button className="nav-button" onClick={() => window.location.href = '/login'}>Prijava</button>
+      <button className="nav-button" onClick={() => window.location.href = '/register'}>Registracija</button>
+      </section>
+
       {/* Icons / Brand Stories */}
       <section className="brand-highlights">
         <div className="highlight-card highlight-card--icon">
