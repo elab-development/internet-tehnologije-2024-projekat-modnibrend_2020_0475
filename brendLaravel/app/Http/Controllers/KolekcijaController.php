@@ -17,7 +17,7 @@ class KolekcijaController extends Controller
 
     public function show($id)
     {
-        $kolekcija = Kolekcija::findOrFail($id);
+        $kolekcija = Kolekcija::with('proizvodi')->findOrFail($id);
         return response()->json($kolekcija, 200);
     }
 

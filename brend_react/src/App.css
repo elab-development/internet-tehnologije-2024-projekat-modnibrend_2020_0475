@@ -36,3 +36,20 @@
     transform: rotate(360deg);
   }
 }
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+nav {
+  backdrop-filter: blur(10px);
+}
+
+a:hover {
+  color: #f06292;
+}
+
+button:hover {
+  color: #f06292;
+}

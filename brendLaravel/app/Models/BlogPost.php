@@ -15,5 +15,6 @@ class BlogPost extends Model
         'autor',
         'datum_objave',
         'kategorija',
+        /// dodati sliku
     ];
 }

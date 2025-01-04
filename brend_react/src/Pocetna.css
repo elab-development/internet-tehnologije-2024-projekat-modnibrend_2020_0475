@@ -18,8 +18,7 @@
   
   /* Hero Section */
   .hero {
-    background: url('https://source.unsplash.com/1600x900/?fashion') center/cover no-repeat;
-    height: 80vh;
+    height: 100vh;
     display: flex;
     align-items: center;
     justify-content: flex-start;
@@ -32,7 +31,8 @@
     content: "";
     position: absolute;
     top:0; left:0; right:0; bottom:0;
-    background: rgba(0,0,0,0.4);
+    background: rgba(0, 0, 0, 0.4); /* Providna pozadina */
+    z-index: 1; /* Preko videa, ali ispod sadržaja */
   }
   
   .hero-content {
@@ -41,6 +41,7 @@
     max-width: 500px;
     color: #fff;
     animation: slideInFromLeft 1.5s ease-out;
+    z-index: 1; /* Sadržaj iznad svega */
   }
   
   .hero-title {
@@ -195,7 +196,6 @@
     color: #fff;
     text-align: center;
     padding: 40px 5%;
-    margin-top: 60px;
   }
   
   .footer-socials {
@@ -320,5 +320,16 @@
   
   .auth-text {
     margin-top: 10px;
+  }
+  
+  .hero-video {
+    position: absolute; /* Osigurava da se video nalazi u pozadini */
+    top: 0; /* Poravnava video na vrh hero sekcije */
+    left: 0; /* Poravnava video na levo */
+    width: 100%; /* Video zauzima celu širinu */
+    height: 100%; /* Video zauzima celu visinu */
+    object-fit: cover; /* Sprečava izobličenje videa */
+    z-index: 0; /* Video ostaje ispod sadržaja */
+    opacity: 1; /* Osigurava da video bude vidljiv */
   }
   

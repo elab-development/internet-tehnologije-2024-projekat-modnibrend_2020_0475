@@ -18,7 +18,7 @@ class ProizvodFactory extends Factory
             'naziv' => $this->faker->word,
             'opis' => $this->faker->sentence,
             'cena' => $this->faker->randomFloat(2, 10, 1000),
-            'kolekcija_id' => Kolekcija::factory(),
+            'kolekcija_id' => Kolekcija::inRandomOrder()->first()->id,
             'slika' => $this->faker->imageUrl(640, 480, 'product'),
             'dostupan' => $this->faker->boolean,
         ];
