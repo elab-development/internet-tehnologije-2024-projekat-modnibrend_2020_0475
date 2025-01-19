@@ -53,3 +53,7 @@ a:hover {
 button:hover {
   color: #f06292;
 }
+
+.content {
+  padding-top: 60px; /* Visina navbara */
+}

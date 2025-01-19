@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './Auth.css';
 import { useNavigate } from 'react-router-dom';
 
-const Login = () => {
+const Login = ({ handleLogin }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
@@ -23,6 +23,7 @@ const Login = () => {
 
       if (response.ok) {
         localStorage.setItem('token', data.token); 
+        handleLogin();
         navigate('/'); 
       } else {
         setError(data.message || 'Došlo je do greške. Pokušajte ponovo.');

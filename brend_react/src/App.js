@@ -22,17 +22,24 @@ function App() {
     setIsLoggedIn(false);
   };
 
+  const handleLogin = () => {
+    setIsLoggedIn(true);
+  };
+
   return (
     <Router>
-    <Navbar isLoggedIn={isLoggedIn} handleLogout={handleLogout} />
-    <Routes>
-      <Route path="/" element={<Pocetna />} />
-      <Route path="/kolekcije" element={<Kolekcije />} />
-      <Route path="/kolekcije/:id" element={<KolekcijaDetalji />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
-    </Routes>
-  </Router>
+      <Navbar isLoggedIn={isLoggedIn} handleLogout={handleLogout} />
+      <div className="content">
+        <Routes>
+          <Route path="/" element={<Pocetna />} />
+          <Route path="/kolekcije" element={<Kolekcije />} />
+          <Route path="/kolekcije/:id" element={<KolekcijaDetalji />} />
+          <Route path="/login" element={<Login handleLogin={handleLogin} />} />
+          <Route path="/register" element={<Register handleLogin={handleLogin} />} />
+        </Routes>
+      </div>
+      
+    </Router>
   );
 }
 

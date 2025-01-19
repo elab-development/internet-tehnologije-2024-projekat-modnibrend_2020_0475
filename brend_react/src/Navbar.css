@@ -3,11 +3,12 @@
     justify-content: space-between;
     align-items: center;
     padding: 20px 20px;
-    background-color: rgba(0, 0, 0, 0.2);
+    background-color: rgba(0, 0, 0, 1);
     position: fixed;
     width: 100%;
     top: 0;
     z-index: 1000;
+    margin-bottom: 20rem;
   }
   
   .navbar a {

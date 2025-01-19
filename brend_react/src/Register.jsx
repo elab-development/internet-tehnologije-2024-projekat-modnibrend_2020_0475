@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './Auth.css';
 import { useNavigate } from 'react-router-dom';
 
-const Register = () => {
+const Register = ({ handleLogin }) =>{
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -30,6 +30,7 @@ const Register = () => {
 
       if (response.ok) {
         localStorage.setItem('token', data.token); 
+        handleLogin();
         navigate('/'); 
       } else {
         setError(data.errors || 'Došlo je do greške. Pokušajte ponovo.');
