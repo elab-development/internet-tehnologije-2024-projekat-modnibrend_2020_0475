@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './Kolekcije.css';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import Kolekcija from './Kolekcija';
 
 const Kolekcije = () => {
   const [kolekcije, setKolekcije] = useState([]);
@@ -44,16 +45,11 @@ const Kolekcije = () => {
       <h1 className="kolekcije-title">Naše Kolekcije</h1>
       <div className="kolekcije-grid">
         {kolekcije.map((kolekcija) => (
-          <div key={kolekcija.id} className="kolekcija-card">
-            <h2>{kolekcija.naziv}</h2>
-            <p>{kolekcija.opis}</p>
-            <button
-              className="detalji-button"
-              onClick={() => navigate(`/kolekcije/${kolekcija.id}`)}
-            >
-              Pogledaj detalje
-            </button>
-          </div>
+          <Kolekcija
+            key={kolekcija.id}
+            kolekcija={kolekcija}
+            onDetaljiClick={() => navigate(`/kolekcije/${kolekcija.id}`)}
+          />
         ))}
       </div>
     </div>
