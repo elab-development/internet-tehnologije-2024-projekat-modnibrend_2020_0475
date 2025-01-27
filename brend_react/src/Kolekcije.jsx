@@ -12,6 +12,19 @@ const Kolekcije = () => {
   useEffect(() => {
     const fetchKolekcije = async () => {
       try {
+        const token = localStorage.getItem('token');
+        if (!token) {
+          navigate('/login');
+          return;
+        }
+        const cachedData = localStorage.getItem('kolekcije');
+        if (cachedData) {
+          setKolekcije(JSON.parse(cachedData));
+          setLoading(false);
+          return; 
+        }
+
+        
         const response = await fetch('http://localhost:8000/api/kolekcije', {
           method: 'GET',
           headers: {
@@ -21,11 +34,17 @@ const Kolekcije = () => {
         });
 
         if (!response.ok) {
+          if (response.status === 401) {
+            navigate('/login');
+            return;
+          }
           throw new Error('Greška pri dohvatanju kolekcija.');
         }
 
         const data = await response.json();
         setKolekcije(data);
+
+        localStorage.setItem('kolekcije', JSON.stringify(data));
       } catch (error) {
         console.error(error.message);
       } finally {
@@ -35,14 +54,14 @@ const Kolekcije = () => {
 
     fetchKolekcije();
   }, []);
-
+  
   if (loading) {
     return <p>Učitavanje kolekcija...</p>;
   }
 
   return (
     <div className="kolekcije-container">
-      <h1 className="kolekcije-title">Naše Kolekcije</h1>
+      <h1 className="kolekcije-title">Naše kolekcije</h1>
       <div className="kolekcije-grid">
         {kolekcije.map((kolekcija) => (
           <Kolekcija

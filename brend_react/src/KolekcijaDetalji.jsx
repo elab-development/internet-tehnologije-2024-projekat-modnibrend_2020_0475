@@ -8,24 +8,26 @@ const KolekcijaDetalji = () => {
   const [kolekcija, setKolekcija] = useState(null);
   const [loading, setLoading] = useState(true);
   const [fashionImages, setFashionImages] = useState([]);
+  const [searchTerm, setSearchTerm] = useState(''); // Stanje za pretragu
+  const [filterDostupan, setFilterDostupan] = useState(''); // Stanje za filtriranje
+  const [filteredProducts, setFilteredProducts] = useState([]); // Filtrirani proizvodi
 
   useEffect(() => {
     const fetchKolekcija = async () => {
       try {
-        const token = localStorage.getItem('token'); 
+        const token = localStorage.getItem('token');
         const response = await fetch(`http://localhost:8000/api/kolekcije/${id}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${token}`,
           },
-        });        
+        });
         if (!response.ok) {
           throw new Error('Greška pri dohvatanju detalja kolekcije.');
         }
         const data = await response.json();
         setKolekcija(data);
-        fetchFashionImages(data.proizvodi.length);
       } catch (error) {
         console.error(error.message);
       } finally {
@@ -33,10 +35,18 @@ const KolekcijaDetalji = () => {
       }
     };
 
-    const fetchFashionImages = async (count) => {
+    fetchKolekcija();
+  }, [id]);
+
+  useEffect(() => {
+    const fetchFashionImages = async () => {
+      if (!kolekcija || !kolekcija.proizvodi) return;
+
       try {
-        const imagePromises = Array.from({ length: count }).map(() => 
-          fetch(`https://api.unsplash.com/photos/random?query=fashion&client_id=6DBJ_LAazkBEfzQMoDLEIIrANJoWJvYsmJHq9Ud8wAw`).then((res) => {
+        const imagePromises = kolekcija.proizvodi.map(() =>
+          fetch(
+            `https://api.unsplash.com/photos/random?query=fashion&client_id=eiu2rLI_TjM26ST5_V2C1kl_eAkFTc3nNjw7dR1ziJY`
+          ).then((res) => {
             if (!res.ok) {
               throw new Error('Greška pri dohvatanju slike sa Unsplash-a.');
             }
@@ -50,8 +60,31 @@ const KolekcijaDetalji = () => {
       }
     };
 
-    fetchKolekcija();
-  }, [id]);
+    if (kolekcija) {
+      fetchFashionImages();
+    }
+  }, [kolekcija]);
+
+  // Filtriranje proizvoda na osnovu pretrage i dostupnosti
+  useEffect(() => {
+    if (!kolekcija || !kolekcija.proizvodi) return;
+
+    let filtered = kolekcija.proizvodi;
+
+    if (searchTerm) {
+      filtered = filtered.filter((proizvod) =>
+        proizvod.naziv.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+
+    if (filterDostupan === 'dostupan') {
+      filtered = filtered.filter((proizvod) => proizvod.dostupan);
+    } else if (filterDostupan === 'nedostupan') {
+      filtered = filtered.filter((proizvod) => !proizvod.dostupan);
+    }
+
+    setFilteredProducts(filtered);
+  }, [searchTerm, filterDostupan, kolekcija]);
 
   if (loading) {
     return <p>Učitavanje detalja kolekcije...</p>;
@@ -72,12 +105,35 @@ const KolekcijaDetalji = () => {
         <div className="kolekcija-info">
           <h1>{kolekcija.naziv}</h1>
           <p>{kolekcija.opis}</p>
-          <p><strong>Datum objave:</strong> {kolekcija.datum_objave}</p>
+          <p>
+            <strong>Datum objave:</strong> {kolekcija.datum_objave}
+          </p>
         </div>
       </div>
+
+      {/* Pretraga i filtriranje */}
+      <div className="filter-section">
+        <input
+          type="text"
+          placeholder="Pretraži proizvode..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="search-input"
+        />
+        <select
+          value={filterDostupan}
+          onChange={(e) => setFilterDostupan(e.target.value)}
+          className="filter-select"
+        >
+          <option value="">Svi proizvodi</option>
+          <option value="dostupan">Dostupni</option>
+          <option value="nedostupan">Nedostupni</option>
+        </select>
+      </div>
+
       <div className="proizvodi-lista">
         <h2>Proizvodi u kolekciji:</h2>
-        {kolekcija.proizvodi.map((proizvod, index) => (
+        {filteredProducts.map((proizvod, index) => (
           <Proizvod
             key={proizvod.id}
             proizvod={proizvod}
