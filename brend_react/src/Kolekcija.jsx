@@ -2,6 +2,8 @@ import React from 'react';
 import { FaTrash, FaEye } from 'react-icons/fa';
 
 const Kolekcija = ({ kolekcija, onDetaljiClick, onDelete }) => {
+  const role = localStorage.getItem('role'); 
+
   const handleDelete = async () => {
     if (window.confirm(`Da li ste sigurni da želite da obrišete kolekciju "${kolekcija.naziv}"?`)) {
       await onDelete(kolekcija.id);
@@ -16,9 +18,11 @@ const Kolekcija = ({ kolekcija, onDetaljiClick, onDelete }) => {
         <button className="detalji-button" onClick={onDetaljiClick}>
           <FaEye /> Pogledaj detalje
         </button>
-        <button className="delete-button" onClick={handleDelete}>
-          <FaTrash /> Obriši
-        </button>
+        {role === 'user' && ( 
+          <button className="delete-button" onClick={handleDelete}>
+            <FaTrash /> Obriši
+          </button>
+        )}
       </div>
     </div>
   );
