@@ -1,9 +1,9 @@
 // Reusable component: Proizvod
 import React from 'react';
 
-const Proizvod = ({ proizvod, image, currency, convertPrice }) => {
+const Proizvod = ({ proizvod, image, currency, convertPrice, onClick }) => {
   return (
-    <div className="proizvod-item">
+    <div className="proizvod-item" onClick={onClick}>
       <img src={image} alt={proizvod.naziv} className="proizvod-slika" />
       <div>
         <h3>{proizvod.naziv}</h3>

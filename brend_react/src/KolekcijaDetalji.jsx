@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import './KolekcijaDetalji.css';
 import Proizvod from './Proizvod';
-import { FaChevronDown } from 'react-icons/fa';
+import { FaChevronDown, FaEdit, FaPlus, FaSave, FaTimes } from 'react-icons/fa';
 
 const exchangeRates = {
   EUR: 117.5,
@@ -15,11 +15,42 @@ const KolekcijaDetalji = () => {
   const [kolekcija, setKolekcija] = useState(null);
   const [loading, setLoading] = useState(true);
   const [fashionImages, setFashionImages] = useState([]);
-  const [searchTerm, setSearchTerm] = useState(''); // Stanje za pretragu
-  const [filterDostupan, setFilterDostupan] = useState(''); // Stanje za filtriranje
-  const [filteredProducts, setFilteredProducts] = useState([]); // Filtrirani proizvodi
+  const [searchTerm, setSearchTerm] = useState(''); 
+  const [filterDostupan, setFilterDostupan] = useState(''); 
+  const [filteredProducts, setFilteredProducts] = useState([]);
   const [currency, setCurrency] = useState('RSD');
   const [showDropdown, setShowDropdown] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [showAddProductModal, setShowAddProductModal] = useState(false);
+  const [showEditProductModal, setShowEditProductModal] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  
+  const [editForm, setEditForm] = useState({
+    naziv: '',
+    opis: '',
+    datum_objave: '',
+    slika: ''
+  });
+
+  const [newProduct, setNewProduct] = useState({
+    naziv: '',
+    opis: '',
+    cena: '',
+    kolekcija_id: id,
+    slika: '',
+    dostupan: true
+  });
+
+  const [editProductForm, setEditProductForm] = useState({
+    naziv: '',
+    opis: '',
+    cena: '',
+    kolekcija_id: id,
+    slika: '',
+    dostupan: true
+  });
+
+  const role = localStorage.getItem('role'); 
 
   useEffect(() => {
     const fetchKolekcija = async () => {
@@ -37,6 +68,8 @@ const KolekcijaDetalji = () => {
         }
         const data = await response.json();
         setKolekcija(data);
+        setEditForm(data);
+
       } catch (error) {
         console.error(error.message);
       } finally {
@@ -99,6 +132,107 @@ const KolekcijaDetalji = () => {
     if (!exchangeRates[currency]) return price;
     return (price / exchangeRates[currency]).toFixed(2); // Ispravljen proračun
   };
+
+  const handleEdit = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch(`http://localhost:8000/api/kolekcije/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(editForm),
+      });
+
+      if (!response.ok) {
+        throw new Error('Greška pri izmeni kolekcije.');
+      }
+
+      const odgovor = await response.json();
+      setKolekcija(odgovor.kolekcija);
+      setShowEditModal(false);
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
+
+  const handleAddProduct = async () => {
+    if (!newProduct.naziv || !newProduct.cena) {
+      alert('Naziv i cena su obavezni!');
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch('http://localhost:8000/api/proizvodi', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(newProduct),
+      });
+
+      if (!response.ok) {
+        throw new Error('Greška pri dodavanju proizvoda.');
+      }
+
+      const odgovor = await response.json();
+      setFilteredProducts([...filteredProducts, odgovor.proizvod]);
+      setShowAddProductModal(false);
+      setNewProduct({
+        naziv: '',
+        opis: '',
+        cena: '',
+        kolekcija_id: id,
+        slika: '',
+        dostupan: true
+      });
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
+
+  const handleProductClick = (product) => {
+    if (role !== 'user') return; 
+    setSelectedProduct(product);
+    setEditProductForm(product);
+    setShowEditProductModal(true);
+  };
+
+  const handleEditProduct = async () => {
+    if (!editProductForm.naziv || !editProductForm.cena) {
+      alert('Naziv i cena su obavezni!');
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch(`http://localhost:8000/api/proizvodi/${selectedProduct.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(editProductForm),
+      });
+
+      if (!response.ok) {
+        throw new Error('Greška pri ažuriranju proizvoda.');
+      }
+
+      const odgovor = await response.json();
+      const updatedProduct = odgovor.proizvod;
+      const updatedProducts = filteredProducts.map((p) =>
+        p.id === updatedProduct.id ? updatedProduct : p
+      );
+      setFilteredProducts(updatedProducts);
+      setShowEditProductModal(false);
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
   
 
   if (loading) {
@@ -123,6 +257,16 @@ const KolekcijaDetalji = () => {
           <p>
             <strong>Datum objave:</strong> {kolekcija.datum_objave}
           </p>
+          {role === 'user' && (
+              <>
+                <button className="edit-button" onClick={() => setShowEditModal(true)}>
+                  <FaEdit /> Izmeni kolekciju
+                </button>
+                <button className="add-product-button" onClick={() => setShowAddProductModal(true)}>
+                  <FaPlus /> Dodaj proizvod
+                </button>
+            </>
+          )}
         </div>
       </div>
 
@@ -147,17 +291,18 @@ const KolekcijaDetalji = () => {
       </div>
 
       <div className="proizvodi-lista">
-        <h2>Proizvodi u kolekciji:</h2>
-        {filteredProducts.map((proizvod, index) => (
-          <Proizvod
-            key={proizvod.id}
-            proizvod={proizvod}
-            image={fashionImages[index]}
-            currency={currency}
-            convertPrice={convertPrice}
-          />
-        ))}
-      </div>
+      <h2>Proizvodi u kolekciji:</h2>
+      {filteredProducts.map((proizvod, index) => (
+        <Proizvod
+          key={proizvod.id}
+          proizvod={proizvod}
+          image={fashionImages[index]}
+          currency={currency}
+          convertPrice={convertPrice}
+          onClick={() => handleProductClick(proizvod)} 
+        />
+      ))}
+    </div>
 
       <div className="currency-selector" onClick={() => setShowDropdown(!showDropdown)}>
         <span>{currency} <FaChevronDown /></span>
@@ -171,6 +316,141 @@ const KolekcijaDetalji = () => {
           </ul>
         )}
       </div>
+
+       {/* Modal za izmenu kolekcije */}
+       {showEditModal && (
+        <div className="modal">
+          <div className="modal-content">
+            <h2>Izmeni kolekciju</h2>
+            <input
+              type="text"
+              placeholder="Naziv kolekcije"
+              value={editForm.naziv}
+              onChange={(e) => setEditForm({ ...editForm, naziv: e.target.value })}
+            />
+            <textarea
+              placeholder="Opis kolekcije"
+              value={editForm.opis}
+              onChange={(e) => setEditForm({ ...editForm, opis: e.target.value })}
+            />
+            <input
+              type="date"
+              value={editForm.datum_objave}
+              onChange={(e) => setEditForm({ ...editForm, datum_objave: e.target.value })}
+            />
+            <input
+              type="text"
+              placeholder="URL slike"
+              value={editForm.slika}
+              onChange={(e) => setEditForm({ ...editForm, slika: e.target.value })}
+            />
+            <div className="modal-actions">
+              <button className="save-btn" onClick={handleEdit}>
+                <FaSave /> Sačuvaj
+              </button>
+              <button className="cancel-btn" onClick={() => setShowEditModal(false)}>
+                <FaTimes /> Otkaži
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal za dodavanje proizvoda */}
+      {showAddProductModal && (
+        <div className="modal">
+          <div className="modal-content">
+            <h2>Dodaj novi proizvod</h2>
+            <input
+              type="text"
+              placeholder="Naziv proizvoda"
+              value={newProduct.naziv}
+              onChange={(e) => setNewProduct({ ...newProduct, naziv: e.target.value })}
+            />
+            <textarea
+              placeholder="Opis proizvoda"
+              value={newProduct.opis}
+              onChange={(e) => setNewProduct({ ...newProduct, opis: e.target.value })}
+            />
+            <input
+              type="number"
+              placeholder="Cena"
+              value={newProduct.cena}
+              onChange={(e) => setNewProduct({ ...newProduct, cena: e.target.value })}
+            />
+            <input
+              type="text"
+              placeholder="URL slike"
+              value={newProduct.slika}
+              onChange={(e) => setNewProduct({ ...newProduct, slika: e.target.value })}
+            />
+            <label>
+              <input
+                type="checkbox"
+                checked={newProduct.dostupan}
+                onChange={(e) => setNewProduct({ ...newProduct, dostupan: e.target.checked })}
+              />
+              Dostupan
+            </label>
+            <div className="modal-actions">
+              <button className="save-btn" onClick={handleAddProduct}>
+                <FaSave /> Sačuvaj
+              </button>
+              <button className="cancel-btn" onClick={() => setShowAddProductModal(false)}>
+                <FaTimes /> Otkaži
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+       {/* Modal za izmenu proizvoda */}
+       {showEditProductModal && (
+        <div className="modal">
+          <div className="modal-content">
+            <h2>Izmeni proizvod</h2>
+            <input
+              type="text"
+              placeholder="Naziv proizvoda"
+              value={editProductForm.naziv}
+              onChange={(e) => setEditProductForm({ ...editProductForm, naziv: e.target.value })}
+            />
+            <textarea
+              placeholder="Opis proizvoda"
+              value={editProductForm.opis}
+              onChange={(e) => setEditProductForm({ ...editProductForm, opis: e.target.value })}
+            />
+            <input
+              type="number"
+              placeholder="Cena"
+              value={editProductForm.cena}
+              onChange={(e) => setEditProductForm({ ...editProductForm, cena: e.target.value })}
+            />
+            <input
+              type="text"
+              placeholder="URL slike"
+              value={editProductForm.slika}
+              onChange={(e) => setEditProductForm({ ...editProductForm, slika: e.target.value })}
+            />
+            <label>
+              <input
+                type="checkbox"
+                checked={editProductForm.dostupan}
+                onChange={(e) => setEditProductForm({ ...editProductForm, dostupan: e.target.checked })}
+              />
+              Dostupan
+            </label>
+            <div className="modal-actions">
+              <button className="save-btn" onClick={handleEditProduct}>
+                <FaSave /> Sačuvaj
+              </button>
+              <button className="cancel-btn" onClick={() => setShowEditProductModal(false)}>
+                <FaTimes /> Otkaži
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
