@@ -2,6 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import './KolekcijaDetalji.css';
 import Proizvod from './Proizvod';
+import { FaChevronDown } from 'react-icons/fa';
+
+const exchangeRates = {
+  EUR: 117.5,
+  USD: 110,
+  RSD: 1,
+};
 
 const KolekcijaDetalji = () => {
   const { id } = useParams();
@@ -11,6 +18,8 @@ const KolekcijaDetalji = () => {
   const [searchTerm, setSearchTerm] = useState(''); // Stanje za pretragu
   const [filterDostupan, setFilterDostupan] = useState(''); // Stanje za filtriranje
   const [filteredProducts, setFilteredProducts] = useState([]); // Filtrirani proizvodi
+  const [currency, setCurrency] = useState('RSD');
+  const [showDropdown, setShowDropdown] = useState(false);
 
   useEffect(() => {
     const fetchKolekcija = async () => {
@@ -86,6 +95,12 @@ const KolekcijaDetalji = () => {
     setFilteredProducts(filtered);
   }, [searchTerm, filterDostupan, kolekcija]);
 
+  const convertPrice = (price) => {
+    if (!exchangeRates[currency]) return price;
+    return (price / exchangeRates[currency]).toFixed(2); // Ispravljen proračun
+  };
+  
+
   if (loading) {
     return <p>Učitavanje detalja kolekcije...</p>;
   }
@@ -138,8 +153,23 @@ const KolekcijaDetalji = () => {
             key={proizvod.id}
             proizvod={proizvod}
             image={fashionImages[index]}
+            currency={currency}
+            convertPrice={convertPrice}
           />
         ))}
+      </div>
+
+      <div className="currency-selector" onClick={() => setShowDropdown(!showDropdown)}>
+        <span>{currency} <FaChevronDown /></span>
+        {showDropdown && (
+          <ul className="currency-dropdown">
+            {Object.keys(exchangeRates).map((cur) => (
+              <li key={cur} onClick={() => { setCurrency(cur); setShowDropdown(false); }}>
+                {cur}
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
     </div>
   );

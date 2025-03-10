@@ -88,3 +88,46 @@
     border-color: #4285f4;
   }
   
+  .currency-selector {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #222;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: bold;
+  }
+  
+  .currency-selector:hover {
+    background: #333;
+  }
+  
+  .currency-dropdown {
+    position: absolute;
+    bottom: 50px;
+    right: 0;
+    background: white;
+    color: black;
+    list-style: none;
+    padding: 5px 0;
+    border-radius: 5px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    width: 80px;
+    text-align: center;
+  }
+  
+  .currency-dropdown li {
+    padding: 8px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  
+  .currency-dropdown li:hover {
+    background: #ddd;
+  }
