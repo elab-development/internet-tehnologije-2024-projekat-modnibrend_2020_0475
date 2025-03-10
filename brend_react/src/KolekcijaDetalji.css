@@ -251,3 +251,43 @@
   background: #e68900; /* Tamnija narandžasta na hover */
   transform: scale(1.05);
 }
+
+.proizvod-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.detalji-button {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 5px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+.detalji-button:hover {
+  background: #0056b3;
+}
+
+.delete-button {
+  background: #dc3545;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 5px;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: all 0.3s ease-in-out;
+}
+
+.delete-button:hover {
+  background: #c82333;
+  transform: scale(1.05);
+}

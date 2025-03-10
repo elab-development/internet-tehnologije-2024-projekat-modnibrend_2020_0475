@@ -234,6 +234,30 @@ const KolekcijaDetalji = () => {
     }
   };
   
+  const handleDeleteProduct = async (id) => {
+    if (role !== 'user') return; 
+
+    if (!window.confirm('Da li ste sigurni da želite da obrišete ovaj proizvod?')) return;
+  
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch(`http://localhost:8000/api/proizvodi/${id}`, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+  
+      if (!response.ok) {
+        throw new Error('Greška pri brisanju proizvoda.');
+      }
+  
+      setFilteredProducts(filteredProducts.filter((proizvod) => proizvod.id !== id));
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
 
   if (loading) {
     return <p>Učitavanje detalja kolekcije...</p>;
@@ -300,6 +324,7 @@ const KolekcijaDetalji = () => {
           currency={currency}
           convertPrice={convertPrice}
           onClick={() => handleProductClick(proizvod)} 
+          onDelete={handleDeleteProduct}
         />
       ))}
     </div>
