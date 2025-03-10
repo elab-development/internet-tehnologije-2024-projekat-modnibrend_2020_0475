@@ -30,6 +30,7 @@ const Register = ({ handleLogin }) =>{
 
       if (response.ok) {
         localStorage.setItem('token', data.token); 
+        localStorage.setItem('role', data.user.role); 
         handleLogin();
         navigate('/'); 
       } else {

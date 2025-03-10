@@ -1,14 +1,25 @@
-// Reusable component: Kolekcija
 import React from 'react';
+import { FaTrash, FaEye } from 'react-icons/fa';
 
-const Kolekcija = ({ kolekcija, onDetaljiClick }) => {
+const Kolekcija = ({ kolekcija, onDetaljiClick, onDelete }) => {
+  const handleDelete = async () => {
+    if (window.confirm(`Da li ste sigurni da želite da obrišete kolekciju "${kolekcija.naziv}"?`)) {
+      await onDelete(kolekcija.id);
+    }
+  };
+
   return (
     <div className="kolekcija-card">
       <h2>{kolekcija.naziv}</h2>
       <p>{kolekcija.opis}</p>
-      <button className="detalji-button" onClick={onDetaljiClick}>
-        Pogledaj detalje
-      </button>
+      <div className="kolekcija-actions">
+        <button className="detalji-button" onClick={onDetaljiClick}>
+          <FaEye /> Pogledaj detalje
+        </button>
+        <button className="delete-button" onClick={handleDelete}>
+          <FaTrash /> Obriši
+        </button>
+      </div>
     </div>
   );
 };
