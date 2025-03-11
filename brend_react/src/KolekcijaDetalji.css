@@ -291,3 +291,32 @@
   background: #c82333;
   transform: scale(1.05);
 }
+
+.filter-section {
+  margin: 20px 0;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+}
+
+.search-input {
+  padding: 8px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  background-color: #222;
+  color: white;
+}
+
+.filter-select {
+  padding: 8px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  background-color: #222;
+  color: white;
+}
+
+.filter-select option {
+  background-color: #222;
+  color: white;
+}

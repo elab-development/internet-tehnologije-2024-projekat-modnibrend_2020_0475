@@ -22,10 +22,10 @@ const Kolekcije = () => {
     const fetchKolekcije = async () => {
       try {
         const token = localStorage.getItem('token');
-        if (!token) {
-          navigate('/login');
-          return;
-        }
+        // if (!token) {
+        //   navigate('/login');
+        //   return;
+        // }
         const cachedData = localStorage.getItem('kolekcije');
         if (cachedData) {
           setKolekcije(JSON.parse(cachedData));
