@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BlogPostController;
 use App\Http\Controllers\KolekcijaController;
@@ -43,4 +44,11 @@ Route::middleware('auth:sanctum')->group(function () {
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('blog-posts', BlogPostController::class);
+});
+
+Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
+    Route::get('/users', [AdminController::class, 'getUsers']);
+    Route::put('/users/{id}/role', [AdminController::class, 'updateUserRole']);
+    Route::get('/statistics', [AdminController::class, 'getStatistics']);
+
 });

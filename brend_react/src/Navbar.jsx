@@ -4,6 +4,7 @@ import './Navbar.css';
 
 function Navbar({ isLoggedIn, handleLogout }) {
   const navigate = useNavigate();
+  const role = localStorage.getItem('role');
 
   const logout = async () => {
     try {
@@ -36,9 +37,15 @@ function Navbar({ isLoggedIn, handleLogout }) {
             <Link className="navbar-button" to="/register">Register</Link>
           </>
         ) : (
-          <button className="navbar-button" onClick={logout}>
-            Odjavi se
-          </button>
+          <>
+            {role == 'admin' && (
+              <Link className="navbar-button" to="/admin">Admin dashboard</Link>
+            )}
+            <button className="navbar-button" onClick={logout}>
+              Odjavi se
+            </button>
+          </>
+  
         )}
       </div>
     </nav>

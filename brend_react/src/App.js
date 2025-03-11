@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import Navbar from './Navbar';
 import Kolekcije from './Kolekcije';
 import KolekcijaDetalji from './KolekcijaDetalji';
+import AdminDashboard from './AdminDashboard';
 
 
 function App() {
@@ -36,6 +37,7 @@ function App() {
           <Route path="/kolekcije/:id" element={<KolekcijaDetalji />} />
           <Route path="/login" element={<Login handleLogin={handleLogin} />} />
           <Route path="/register" element={<Register handleLogin={handleLogin} />} />
+          <Route path="/admin" element={<AdminDashboard />} />
         </Routes>
       </div>
       
