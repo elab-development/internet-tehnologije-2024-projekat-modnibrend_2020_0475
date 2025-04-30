@@ -1,0 +1,32 @@
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 20px;
+    background-color: rgba(0, 0, 0, 1);
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+    margin-bottom: 20rem;
+  }
+  
+  .navbar a {
+    color: white;
+    text-decoration: none;
+    margin: 0 15px;
+    font-size: 18px;
+  }
+  
+  .navbar-button {
+    background-color: transparent;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 18px;
+    text-decoration: none; /* Obezbeđuje da linkovi nemaju podvlačenje */
+  }
+  
+  .navbar-button:hover {
+    color: #f06292;
+  }
