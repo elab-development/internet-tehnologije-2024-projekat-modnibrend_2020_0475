@@ -195,7 +195,7 @@ const KolekcijaDetalji = () => {
   };
 
   const handleProductClick = (product) => {
-    if (role !== 'user') return; 
+    if (role !== 'admin') return;
     setSelectedProduct(product);
     setEditProductForm(product);
     setShowEditProductModal(true);
@@ -235,7 +235,7 @@ const KolekcijaDetalji = () => {
   };
   
   const handleDeleteProduct = async (id) => {
-    if (role !== 'user') return; 
+    if (role !== 'admin') return;
 
     if (!window.confirm('Da li ste sigurni da želite da obrišete ovaj proizvod?')) return;
   
@@ -281,7 +281,7 @@ const KolekcijaDetalji = () => {
           <p>
             <strong>Datum objave:</strong> {kolekcija.datum_objave}
           </p>
-          {role === 'user' && (
+          {role === 'admin' && (
               <>
                 <button className="edit-button" onClick={() => setShowEditModal(true)}>
                   <FaEdit /> Izmeni kolekciju

@@ -18,7 +18,7 @@ const Kolekcija = ({ kolekcija, onDetaljiClick, onDelete }) => {
         <button className="detalji-button" onClick={onDetaljiClick}>
           <FaEye /> Pogledaj detalje
         </button>
-        {role === 'user' && ( 
+        {role === 'admin' && (
           <button className="delete-button" onClick={handleDelete}>
             <FaTrash /> Obriši
           </button>

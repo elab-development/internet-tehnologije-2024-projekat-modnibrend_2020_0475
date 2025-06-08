@@ -40,7 +40,10 @@ function Navbar({ isLoggedIn, handleLogout }) {
           </>
         ) : (
           <>
-            {role == 'admin' && (
+            {role === 'user' && (
+                <Link to="/korpa">Korpa</Link>
+            )}
+            {role === 'admin' && (
               <Link className="navbar-button" to="/admin">Admin dashboard</Link>
             )}
             <button className="navbar-button" onClick={logout}>

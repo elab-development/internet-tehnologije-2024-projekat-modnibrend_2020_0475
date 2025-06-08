@@ -8,6 +8,7 @@ import Navbar from './Navbar';
 import Kolekcije from './Kolekcije';
 import KolekcijaDetalji from './KolekcijaDetalji';
 import AdminDashboard from './AdminDashboard';
+import CartPage from "./CartPage";
 
 
 function App() {
@@ -37,6 +38,7 @@ function App() {
           <Route path="/kolekcije/:id" element={<KolekcijaDetalji />} />
           <Route path="/login" element={<Login handleLogin={handleLogin} />} />
           <Route path="/register" element={<Register handleLogin={handleLogin} />} />
+          <Route path="/korpa" element={<CartPage />} />
           <Route path="/admin" element={<AdminDashboard />} />
         </Routes>
       </div>

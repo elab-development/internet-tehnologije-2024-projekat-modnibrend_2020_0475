@@ -123,7 +123,7 @@ const Kolekcije = () => {
   return (
     <div className="kolekcije-container">
       <h1 className="kolekcije-title">Naše kolekcije</h1>
-      {role === 'user' && (
+      {role === 'admin' && (
         <div className="actions">
           <button className="add-btn" onClick={() => setShowModal(true)}>
             <FaPlus /> Dodaj kolekciju
